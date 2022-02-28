@@ -7,9 +7,12 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\SignupForm;
+use app\models\User;
+
 
 class SiteController extends Controller
 {
@@ -60,9 +63,16 @@ class SiteController extends Controller
      *
      * @return string
      */
+
     public function actionIndex()
     {
-        return $this->render('index');
+        $dataProvider = new ActiveDataProvider([
+            'query' => User::find(),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        return $this->render('index', ['dataProvider'=>$dataProvider]);
     }
 
     /**
@@ -75,13 +85,9 @@ class SiteController extends Controller
         $model = new SignupForm();
 
         if ($model->load($this->request->post()) && $model->validate()) {
-
-          $user = $model->signup();
-//            if ($user = $model->signup()) {
-////                if (Yii::$app->getUser()->login($user)) {
-//                    return $this->goHome();
-//                }
-//            }
+        Yii::$app->session->setFlash('success', 'Вы успешно зарегестрированы');
+        $user = $model->signup();
+        return $this->goHome();
         }
         return $this->render('signup', compact('model'));
     }
