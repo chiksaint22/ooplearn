@@ -37,15 +37,18 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Загрузить документы', 'url' => ['/fileload/upload']],
-            ['label' => 'Регистрация', 'url' => ['/site/signup']],
+            Yii::$app->user->identity->username ? (
+                ['label' => 'Загрузить документы', 'url' => ['/fileload/upload']]
+            ) : (
+            ['label' => 'Регистрация', 'url' => ['/site/signup']]
+            ),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Выйти (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()

@@ -5,6 +5,12 @@ use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\web\IdentityInterface;
 
+/**
+ * Class User
+ * @property int $id
+ * @property string $username
+ * @property Document[] $documents
+ */
 class User extends ActiveRecord implements IdentityInterface
 {
 
@@ -81,5 +87,13 @@ class User extends ActiveRecord implements IdentityInterface
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
         ];
+    }
+    public static function tableName()
+    {
+        return 'user';
+    }
+    public function getDocuments()
+    {
+        return $this->hasMany(Document::class, ['user_id'=>'id']);
     }
 }

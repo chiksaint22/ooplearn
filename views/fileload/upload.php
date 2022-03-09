@@ -9,6 +9,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
     <?= $form->field($model, 'loadFiles[]')->fileInput(['multiple' => true]) ?>
+    <?=$form->field($model, 'type')->dropDownList([
+    0 => 'Публичный',
+    1 => 'Условно-приватный',
+    2 => 'Приватный'
+    ]);
+    ?>
+
 
     <div>
         <?= Html::submitButton('Загрузить', ['class' => 'btn btn-warning']) ?>

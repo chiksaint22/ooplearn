@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use app\models\Document;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -23,18 +24,23 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'class' => AccessControl::class,
+                'only' => ['login', 'logout', 'signup', 'upload'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
                         'allow' => true,
+                        'actions' => ['login', 'signup'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout'],
                         'roles' => ['@'],
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -67,12 +73,16 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find(),
+            'query' => Document::find(),
+
             'pagination' => [
                 'pageSize' => 10,
             ],
         ]);
-        return $this->render('index', ['dataProvider'=>$dataProvider]);
+        $user = User::findOne(24);
+
+        return $this->render('index', ['dataProvider'=>$dataProvider, 'user'=> $user]);
+
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php
 
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
 
 
@@ -14,21 +16,24 @@ echo GridView::widget([
     'dataProvider' => $dataProvider,
     'columns'=>[
         [
-            'class' => 'yii\grid\SerialColumn'
-        ],
-        'username',
-        [
-            'attribute' => 'Загруженные документы',
+            'attribute' => 'Название документа',
+            'value' => function(\app\models\Document $model) {
+                return Html::a(Html::encode($model->name), ['fileload/download', 'id' => $model->id]);
+            },
+            'format' =>'raw',
         ],
         [
             'attribute' => 'Дата загрузки',
-            'format' => ['date', 'php:Y-m-d']
+            'format' => ['date', 'php:d.m.Y'],
+            'value' => 'date'
         ],
         [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => '{view} {update}'
+            'attribute' => 'Пользователь',
+            'value' => function(\app\models\Document $model) {
+                return $model->user->username;
+
+            }
         ],
     ]
 ]);
-?>
 
