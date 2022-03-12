@@ -42,10 +42,12 @@ class FileloadController extends Controller
     {
         $model = new UploadForm();
 
-        if (Yii::$app->request->isPost) {
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
+
             $model->loadFiles = UploadedFile::getInstances($model, 'loadFiles');
+            $model->type = \Yii::$app->request->post('type');
             $test = $model->upload();
-        }
+            }
 
         return $this->render('upload', ['model' => $model]);
     }

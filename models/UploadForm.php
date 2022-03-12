@@ -34,21 +34,18 @@ class UploadForm extends Model
                 $file->saveAs($filePath);
 
                 $document = new Document();
-                $request = Yii::$app->request;
+
                 $document->name = $file->baseName;
                 $document->path = $filePath;
                 $document->user_id = Yii::$app->user->id;
                 $document->date = date("Y-m-d H:i:s");
+                $document->type_access = $this->type;
+//                echo '<pre>';
+//                var_dump($this->type);
+//                echo '</pre>';
+                $document->save();
 
-                if ($document->load(Yii::$app->request->post())) {
-                    $type = $request->post('type');
-                    $document->type_access = $type;
-                    $document->save();
                     Yii::$app->session->setFlash('success', 'Документы успешно загружены');
-                }
-                else {
-                    Yii::$app->session->setFlash('danger', 'Что-то пошло не так');
-                }
             }
             return true;
         } else {
