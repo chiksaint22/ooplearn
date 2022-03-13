@@ -24,6 +24,8 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+//            'identityClass' => 'mdm\admin\models\User',
+//            'loginUrl' => ['rbac/user/login'],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -52,17 +54,43 @@ $config = [
             'rules' => [
             ],
         ],
-
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+        ],
     ],
     'modules' => [
         'admin' => [
             'class' => 'app\modules\admin\Module',
         ],
+        'rbac' => [
+            'class' => 'mdm\admin\Module',
+            'controllerMap' => [
+                'assignment' => [
+                    'class' => 'mdm\admin\controllers\AssignmentController',
+                    'userClassName' => 'app\models\User',
+                    'idField' => 'id',
+                    'usernameField' => 'username'
+                    ]
+                ],
+            'layout' => 'left-menu',
+            'mainLayout' => '@app/views/layouts/main.php',
+            ],
+        'layout' => 'left-menu',
+        'mainLayout' => '@app/views/layouts/main.php',
         'user' => [
             'class' => 'app\modules\user\Module',
             ]
     ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/*',
+//            'admin/*',
+//            'rbac/*',
+        ]
+    ],
     'params' => $params,
+
 ];
 
 if (YII_ENV_DEV) {

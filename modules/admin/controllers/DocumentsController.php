@@ -2,16 +2,22 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\User;
-use app\models\UserSearch;
+use Yii;
+
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+use app\models\DocumentSearch;
+use app\models\Document;
+use app\models\UploadForm;
+
 
 /**
- * UserController implements the CRUD actions for User model.
+ * DocumentsController implements the CRUD actions for Document model.
  */
-class UsersController extends Controller
+class DocumentsController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,13 +38,13 @@ class UsersController extends Controller
     }
 
     /**
-     * Lists all User models.
+     * Lists all Document models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new UserSearch();
+        $searchModel = new DocumentSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -48,7 +54,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single Document model.
      * @param int $id
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -61,20 +67,20 @@ class UsersController extends Controller
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new Document model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new User();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        $model = new UploadForm();
+
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
+
+            $model->loadFiles = UploadedFile::getInstances($model, 'loadFiles');
+            $model->type = \Yii::$app->request->post('type');
+            $test = $model->upload();
         }
 
         return $this->render('create', [
@@ -83,7 +89,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing Document model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id
      * @return string|\yii\web\Response
@@ -103,7 +109,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing Document model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id
      * @return \yii\web\Response
@@ -117,18 +123,31 @@ class UsersController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the Document model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id
-     * @return User the loaded model
+     * @return Document the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne(['id' => $id])) !== null) {
+        if (($model = Document::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionDownload($id)
+    {
+        $model = Document::findOne($id);
+
+        if ($model == null) {
+            return $this->goHome();
+        }
+
+        $file = Yii::getAlias('@app/web/'.$model->path);
+
+        return Yii::$app->response->sendFile($file);
     }
 }

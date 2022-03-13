@@ -3,13 +3,13 @@
 
 namespace app\controllers;
 
-use app\models\Document;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
+use app\models\Document;
 
 
 class FileloadController extends Controller
@@ -49,7 +49,7 @@ class FileloadController extends Controller
             $test = $model->upload();
             }
 
-        return $this->render('upload', ['model' => $model]);
+        return $this->render('create', ['model' => $model]);
     }
 
     public function actionDownload($id)

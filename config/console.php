@@ -3,6 +3,8 @@
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
+
+
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
@@ -26,6 +28,9 @@ $config = [
             ],
         ],
         'db' => $db,
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+        ],
     ],
     'params' => $params,
     /*
@@ -46,3 +51,6 @@ if (YII_ENV_DEV) {
 }
 
 return $config;
+
+
+

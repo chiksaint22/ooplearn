@@ -38,7 +38,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             Yii::$app->user->identity->username ? (
-                ['label' => 'Загрузить документы', 'url' => ['/fileload/upload']]
+                ['label' => 'Админ-панель', 'url' => ['/admin/documents/index']]
             ) : (
             ['label' => 'Регистрация', 'url' => ['/site/signup']]
             ),

@@ -6,7 +6,6 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
-use yii\helpers\Html;
 
 class UploadForm extends Model
 {
@@ -40,9 +39,6 @@ class UploadForm extends Model
                 $document->user_id = Yii::$app->user->id;
                 $document->date = date("Y-m-d H:i:s");
                 $document->type_access = $this->type;
-//                echo '<pre>';
-//                var_dump($this->type);
-//                echo '</pre>';
                 $document->save();
 
                     Yii::$app->session->setFlash('success', 'Документы успешно загружены');
