@@ -47,7 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                     'attribute' => 'Приватность',
-//            'value'=>'type_access',
+                    'value' => function(\app\models\Document $model) {
+                    return $model->type_access;
+                }
             ]
         ],
     ]) ?>

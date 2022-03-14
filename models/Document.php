@@ -24,4 +24,13 @@ class Document extends ActiveRecord
     {
         return $this->hasOne(User::class, ['id'=>'user_id']);
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'name' => 'Название документа',
+            'date' => 'Дата',
+            'type_access' => 'Приватность',
+        ];
+    }
 }

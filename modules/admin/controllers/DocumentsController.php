@@ -79,13 +79,13 @@ class DocumentsController extends Controller
         if (Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
 
             $model->loadFiles = UploadedFile::getInstances($model, 'loadFiles');
-            $model->type = \Yii::$app->request->post('type');
+            $data = \Yii::$app->request->post('UploadForm', []);
+            $model->type = isset($data['type']) ? $data['type'] : null;
             $test = $model->upload();
+        } else {
+            $errors = $model->errors;
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->render('create', ['model' => $model,]);
     }
 
     /**
@@ -99,7 +99,13 @@ class DocumentsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+
+            $data = \Yii::$app->request->post('Document', []);
+            $model->name = isset($data['name']) ? $data['name'] : null;
+            $model->type_access = isset($data['type_access']) ? $data['type_access'] : null;
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

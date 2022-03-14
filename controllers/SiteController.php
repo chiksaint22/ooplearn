@@ -73,10 +73,16 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Document::find(),
-
+            'query' => Document::find()
+                ->where(['type_access'=>'Публичный']),
             'pagination' => [
                 'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'date' => SORT_DESC,
+//                    'title' => SORT_ASC,
+                ]
             ],
         ]);
         $user = User::findOne(24);

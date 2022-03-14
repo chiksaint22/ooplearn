@@ -20,7 +20,7 @@ class UploadForm extends Model
     {
         return [
             [['loadFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'doc, docx, xls, xlsx, pdf', 'maxFiles' => 5],
-            [['type'], 'integer']
+            ['type', 'required', 'message' => 'Задайте приватность!']
         ];
     }
 

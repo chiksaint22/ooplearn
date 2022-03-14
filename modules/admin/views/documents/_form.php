@@ -10,21 +10,22 @@ use yii\widgets\ActiveForm;
 
 <div class="document-form">
 
-    <?php $form = ActiveForm::begin(); ?>
-
+    <?php $form = ActiveForm::begin();
+    $items = [
+        'Публичный' => 'Публичный',
+        'Условно-приватный' => 'Условно-приватный',
+        'Приватный'=>'Приватный'
+    ];
+    $params = [
+        'prompt' => 'Редактировать приватность...'
+    ];
+    ?>
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?=$form->field($model, 'type_access')->dropDownList([
-        0 => 'Публичный',
-        1 => 'Условно-приватный',
-        2 => 'Приватный'
-    ]);
-    ?>
+    <?=$form->field($model, 'type_access')->dropDownList($items, $params);?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
-
 </div>

@@ -17,7 +17,7 @@ echo GridView::widget([
         [
             'attribute' => 'Название документа',
             'value' => function(\app\models\Document $model) {
-                return Html::a(Html::encode($model->name), ['fileload/download', 'id' => $model->id]);
+                return Html::a(Html::encode($model->name), ['documents/download', 'id' => $model->id]);
             },
             'format' =>'raw',
         ],
@@ -31,6 +31,12 @@ echo GridView::widget([
             'value' => function(\app\models\Document $model) {
                 return $model->user->username;
 
+            }
+        ],
+        [
+            'attribute' => 'Приватность',
+            'value' => function(\app\models\Document $model) {
+                return $model->type_access;
             }
         ],
     ]

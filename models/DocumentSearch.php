@@ -18,9 +18,8 @@ class DocumentSearch extends Document
         return [
             [['id', 'user_id'], 'integer'],
             [['path', 'date', 'name', 'type_access'], 'safe'],
-        ];
+            ];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -60,6 +59,7 @@ class DocumentSearch extends Document
             'id' => $this->id,
             'user_id' => $this->user_id,
             'date' => $this->date,
+            'type_access' => $this->type_access,
         ]);
 
         $query->andFilterWhere(['like', 'path', $this->path])
