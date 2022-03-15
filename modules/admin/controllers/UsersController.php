@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use Yii;
 use app\models\User;
 use app\models\UserSearch;
 use yii\web\Controller;
@@ -13,6 +14,9 @@ use yii\filters\VerbFilter;
  */
 class UsersController extends Controller
 {
+    public $password;
+    public $username;
+
     /**
      * @inheritDoc
      */
@@ -70,7 +74,11 @@ class UsersController extends Controller
         $model = new User();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+                $data = \Yii::$app->request->post('User', []);
+                $model->username = isset($data['name']) ? $data['name'] : null;
+                $model->password = \Yii::$app->security->generatePasswordHash($data['password']);
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -93,8 +101,12 @@ class UsersController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $data = \Yii::$app->request->post('User', []);
+            $model->username = isset($data['username']) ? $data['username'] : null;
+            $model->password = \Yii::$app->security->generatePasswordHash($data['password']);
+            $model->save();
+            return $this->redirect(['view']);
         }
 
         return $this->render('update', [

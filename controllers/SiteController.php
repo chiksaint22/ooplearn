@@ -2,20 +2,18 @@
 
 namespace app\controllers;
 
-
-use app\models\Document;
 use Yii;
+use yii\base\BaseObject;
 use yii\filters\AccessControl;
-use yii\web\Controller;
+use mdm\admin\controllers\UserController;
 use yii\web\Response;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\SignupForm;
-use app\models\User;
+use app\models\Login;
+use app\models\Signup;
+use app\models\Document;
 
-
-class SiteController extends Controller
+class SiteController extends UserController
 {
     /**
      * {@inheritdoc}
@@ -25,7 +23,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['login', 'logout', 'signup', 'upload'],
+                'only' => ['login', 'logout', 'signup'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -81,16 +79,12 @@ class SiteController extends Controller
             'sort' => [
                 'defaultOrder' => [
                     'date' => SORT_DESC,
-//                    'title' => SORT_ASC,
                 ]
             ],
         ]);
-        $user = User::findOne(24);
 
-        return $this->render('index', ['dataProvider'=>$dataProvider, 'user'=> $user]);
-
+        return $this->render('index', ['dataProvider'=>$dataProvider]);
     }
-
     /**
      * Sign Up.
      *
@@ -98,16 +92,17 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
-
-        if ($model->load($this->request->post()) && $model->validate()) {
-        Yii::$app->session->setFlash('success', 'Вы успешно зарегестрированы');
-        $user = $model->signup();
-        return $this->goHome();
+        $model = new Signup();
+        if ($model->load(Yii::$app->getRequest()->post())) {
+            if ($user = $model->signup()) {
+                return $this->goHome();
+            }
         }
-        return $this->render('signup', compact('model'));
-    }
 
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
     /**
      * Login action.
      *
@@ -115,21 +110,19 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+        if (!Yii::$app->getUser()->isGuest) {
             return $this->goHome();
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        $model = new Login();
+        if ($model->load(Yii::$app->getRequest()->post()) && $model->login()) {
             return $this->goBack();
-        }
-
-        $model->password = '';
+        } else {
             return $this->render('login', [
-            'model' => $model,
-        ]);
+                'model' => $model,
+            ]);
+        }
     }
-
     /**
      * Logout action.
      *
@@ -141,5 +134,12 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
+    public function actionRequestPasswordReset()
+    {
+
+        return $this->render('requestPasswordResetToken');
+    }
+
 }
 

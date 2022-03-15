@@ -100,6 +100,7 @@ return [
             '/admin/documents/update',
             '/admin/documents/view',
             '/fileload/download/*',
+            '/documents/download/*',
         ],
     ],
     '/admin/default/index' => [
@@ -317,5 +318,11 @@ return [
     ],
     '/fileload/download/*' => [
         'type' => 2,
+    ],
+    '/documents/download/*' => [
+        'type' => 2,
+    ],
+    'Автор' => [
+        'type' => 1,
     ],
 ];

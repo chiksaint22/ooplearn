@@ -22,6 +22,7 @@ $params = [
 ];
 ?>
 <?= $form->field($model, 'loadFiles[]')->fileInput(['multiple' => true])->label('') ?>
+
 <?= $form->field($model, 'type')->dropDownList($items, $params)->label('Настройки приватности') ?>
 <div class="form-group">
     <?= Html::submitButton('Загрузить', ['class' => 'btn btn-warning'])?>
