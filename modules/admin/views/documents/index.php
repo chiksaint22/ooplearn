@@ -21,10 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Загрузить документ'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Редактор пользователей'), ['users/index'], ['class' => 'btn btn-primary']) ?>
-    </p>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([

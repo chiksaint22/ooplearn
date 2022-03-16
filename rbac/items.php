@@ -6,6 +6,7 @@ return [
         'description' => 'Пользователь',
         'children' => [
             'Работа с документами',
+            'updateOwnDoc',
         ],
     ],
     'Admin' => [
@@ -14,6 +15,7 @@ return [
         'children' => [
             'Редактирование пользователей',
             'Работа с документами',
+            'updateOwnDoc',
         ],
     ],
     'Редактирование пользователей' => [
@@ -322,7 +324,16 @@ return [
     '/documents/download/*' => [
         'type' => 2,
     ],
-    'Автор' => [
-        'type' => 1,
+    'updateDoc' => [
+        'type' => 2,
+        'description' => 'обновить документ',
+    ],
+    'updateOwnDoc' => [
+        'type' => 2,
+        'description' => 'возможность обновить только свой документ',
+        'ruleName' => 'Author',
+        'children' => [
+            'updateDoc',
+        ],
     ],
 ];

@@ -8,8 +8,8 @@ class AuthorRule extends Rule
 {
     public $name = 'isUser';
 
-    public function execute($user_id, $item, $params)
+    public function execute($user, $item, $params)
     {
-        return isset($params['document']) ? $params['document']->user_id == $user_id : false;
+        return isset($params['documents']) ? $params['documents']->user_id == $user : false;
     }
 }

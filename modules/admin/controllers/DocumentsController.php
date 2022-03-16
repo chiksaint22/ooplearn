@@ -5,13 +5,13 @@ namespace app\modules\admin\controllers;
 use Yii;
 
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use app\models\DocumentSearch;
 use app\models\Document;
 use app\models\UploadForm;
-
 
 /**
  * DocumentsController implements the CRUD actions for Document model.
@@ -98,6 +98,10 @@ class DocumentsController extends Controller
     {
         $model = $this->findModel($id);
 
+        if (!Yii::$app->user->can('updateOwnDoc', ['documents'=>$model]))
+        {
+            throw new ForbiddenHttpException("Редактировать можно только свои документы");
+        }
         if ($this->request->isPost && $model->load($this->request->post())) {
 
             $data = \Yii::$app->request->post('Document', []);
@@ -122,8 +126,13 @@ class DocumentsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
+        if (!Yii::$app->user->can('updateOwnDoc', ['documents'=>$model]))
+        {
+            throw new ForbiddenHttpException("Удалять можно только свои документы");
+        }
+        $model->delete();
         return $this->redirect(['index']);
     }
 
