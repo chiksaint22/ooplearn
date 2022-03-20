@@ -19,7 +19,7 @@ echo GridView::widget([
         [
             'attribute' => 'Название документа',
             'value' => function(\app\models\Document $model) {
-                return Html::a(Html::encode($model->name), ['documents/download', 'id' => $model->id]);
+                return Html::a(Html::encode($model->name), ['admin/documents/download', 'id' => $model->id]);
             },
             'format' =>'raw',
         ],
