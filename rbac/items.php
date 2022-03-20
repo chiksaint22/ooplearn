@@ -324,16 +324,9 @@ return [
     '/documents/download/*' => [
         'type' => 2,
     ],
-    'updateDoc' => [
-        'type' => 2,
-        'description' => 'обновить документ',
-    ],
     'updateOwnDoc' => [
         'type' => 2,
-        'description' => 'возможность обновить только свой документ',
+        'description' => 'возможность обновлять и редактировать только свой документ',
         'ruleName' => 'Author',
-        'children' => [
-            'updateDoc',
-        ],
     ],
 ];

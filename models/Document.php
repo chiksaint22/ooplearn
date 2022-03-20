@@ -7,23 +7,38 @@ use yii\db\ActiveRecord;
 /**
  * Class Document
  * @package app\models
+ * @property int $id
  * @property string $path
+ * @property object $user
  * @property int $user_id
  * @property int $date
- *  @property User $user
- * *  @property string $type_access
+ * @property int $name
+ * @property string $type_access
+ * @property int $date_from
+ * @property int $date_to
  */
 
 class Document extends ActiveRecord
 {
-    public static function tableName()
+    public $date_from;
+    public $date_to;
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function rules()
     {
-        return 'document';
+        return [
+            [['id', 'user_id'], 'integer'],
+            [['path', 'date', 'name', 'type_access'], 'safe'],
+            [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
+        ];
     }
-    public function getUser()
-    {
-        return $this->hasOne(User::class, ['id'=>'user_id']);
-    }
+
+    /**
+     * {@inheritdoc}
+     */
 
     public function attributeLabels()
     {
@@ -32,5 +47,14 @@ class Document extends ActiveRecord
             'date' => 'Дата',
             'type_access' => 'Приватность',
         ];
+    }
+
+    public static function tableName()
+    {
+        return 'document';
+    }
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id'=>'user_id']);
     }
 }

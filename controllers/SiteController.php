@@ -2,49 +2,13 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\base\BaseObject;
-use yii\filters\AccessControl;
 use mdm\admin\controllers\UserController;
-use yii\web\Response;
 use yii\data\ActiveDataProvider;
-use yii\filters\VerbFilter;
-use app\models\Login;
-use app\models\Signup;
 use app\models\Document;
+use app\models\Date;
 
 class SiteController extends UserController
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['login', 'logout', 'signup'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['login', 'signup'],
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['logout'],
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * {@inheritdoc}
@@ -70,9 +34,10 @@ class SiteController extends UserController
 
     public function actionIndex()
     {
+
         $dataProvider = new ActiveDataProvider([
             'query' => Document::find()
-                ->where(['type_access'=>'Публичный']),
+                ->where(['type_access' => 'Публичный']),
             'pagination' => [
                 'pageSize' => 10,
             ],
@@ -83,63 +48,62 @@ class SiteController extends UserController
             ],
         ]);
 
-        return $this->render('index', ['dataProvider'=>$dataProvider]);
-    }
-    /**
-     * Sign Up.
-     *
-     * @return
-     */
-    public function actionSignup()
-    {
-        $model = new Signup();
-        if ($model->load(Yii::$app->getRequest()->post())) {
-            if ($user = $model->signup()) {
-                return $this->goHome();
+        $day = (new \yii\db\Query())
+            ->select('*')
+            ->from('document')
+            ->Where(['>', 'date', date('Y-m-d', strtotime('-1 day'))])
+            ->count();
+        $month = (new \yii\db\Query())
+            ->select('*')
+            ->from('document')
+            ->Where(['>', 'date', date('Y-m-d', strtotime('-31 day'))])
+            ->count();
+        $year = (new \yii\db\Query())
+            ->select('*')
+            ->from('document')
+            ->Where(['>', 'date', date('Y-m-d', strtotime('-1 year'))])
+            ->count();
+
+        $model = new Date();
+
+        if (($this->request->isPost) && $model->validate()) {
+            $date = \Yii::$app->request->post();
+            $model->date_from = isset($date['date_from']) ? $date['date_from'] : null;
+            $model->date_to = isset($date['date_to']) ? $date['date_to'] : null;
             }
-        }
+        $public = (new \yii\db\Query())
+            ->select('*')
+            ->from('document')
+            ->Where(['=', 'type_access', 'публичный'])
+            ->andWhere(['>=', 'date', $model->date_from ])
+            ->andWhere(['<=', 'date', $model->date_to])
+            ->count();
 
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
-    }
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->getUser()->isGuest) {
-            return $this->goHome();
-        }
+        $uprivate = (new \yii\db\Query())
+            ->select('*')
+            ->from('document')
+            ->Where(['=', 'type_access', 'условно-приватный'])
+            ->andWhere(['>=', 'date', $model->date_from ])
+            ->andWhere(['<=', 'date', $model->date_to])
+            ->count();
 
-        $model = new Login();
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
+        $private = (new \yii\db\Query())
+            ->select('*')
+            ->from('document')
+            ->Where(['=', 'type_access', 'приватный'])
+            ->andWhere(['>=', 'date', $model->date_from ])
+            ->andWhere(['<=', 'date', $model->date_to])
+            ->count();
 
-        return $this->goHome();
-    }
-
-    public function actionRequestPasswordReset()
-    {
-
-        return $this->render('requestPasswordResetToken');
-    }
-
+                return $this->render('index', [
+                    'dataProvider' => $dataProvider,
+                    'day' => $day,
+                    'month' => $month,
+                    'year' => $year,
+                    'public' => $public,
+                    'uprivate' => $uprivate,
+                    'private' => $private
+                ]);
+            }
 }
 

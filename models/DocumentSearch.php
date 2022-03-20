@@ -10,19 +10,7 @@ use yii\data\ActiveDataProvider;
  */
 class DocumentSearch extends Document
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['id', 'user_id'], 'integer'],
-            [['path', 'date', 'name', 'type_access'], 'safe'],
-            ];
-    }
-    /**
-     * {@inheritdoc}
-     */
+
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -44,6 +32,14 @@ class DocumentSearch extends Document
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'date' => SORT_DESC,
+                ]
+            ],
         ]);
 
         $this->load($params);
@@ -64,7 +60,9 @@ class DocumentSearch extends Document
 
         $query->andFilterWhere(['like', 'path', $this->path])
             ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'type_access', $this->type_access]);
+            ->andFilterWhere(['like', 'type_access', $this->type_access])
+            ->andFilterWhere(['>=', 'date', $this->date_from])
+            ->andFilterWhere(['<=', 'date', $this->date_to]);
 
         return $dataProvider;
     }
