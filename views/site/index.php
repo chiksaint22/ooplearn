@@ -25,7 +25,7 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'Дата загрузки',
-            'format' => ['date', 'php:Y-m-d'],
+            'format' => ['date', 'php:d.m.y'],
             'value' => 'date'
         ],
         [
@@ -38,9 +38,10 @@ echo GridView::widget([
         [
             'attribute' => 'Приватность',
             'value' => function(\app\models\Document $model) {
-                return $model->type_access;
+                return $model->type_access_id;
             }
         ],
+
     ]
 ]);
 
@@ -62,29 +63,46 @@ echo GridView::widget([
     <div class="col-sm-6">
 <div class="card">
     <div class="card-header">
-        Отношение публичных\условно-приватных\приватных
+        Соотношение документов за период <?= $date_def_from ?> - <?= $date_def_to ?>
     </div>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">Публичные: <span class="badge badge-primary badge-pill"><?= $public ?></span></li>
-        <li class="list-group-item">Условно-приватные: <span class="badge badge-primary badge-pill"><?= $uprivate ?></span></li>
-        <li class="list-group-item">Приватные: <span class="badge badge-primary badge-pill"><?= $private ?></span> </li>
+        <li class="list-group-item">Публичные: <span class="badge badge-primary badge-pill">
+                <?= $public ?></span></li>
+        <li class="list-group-item">Условно-приватные: <span class="badge badge-primary badge-pill">
+                <?= $uprivate ?></span></li>
+        <li class="list-group-item">Приватные: <span class="badge badge-primary badge-pill">
+                <?= $private ?></span> </li>
     </ul>
 
 </div>
-        Выберите интервал дат:
         <form class="form-group" action="/site/index" method="post">
-            <?php
-            echo DatePicker::widget([
-                'name' => 'date_from',
-                'name2' => 'date_to',
-                'type' => DatePicker::TYPE_RANGE,
-                'separator' => '-',
-                'pluginOptions' => ['format' => 'yyyy-mm-dd']]);
-            ?>
+            <div class="row" style="margin-bottom: 1rem; margin-top: 1rem ">
+                <div class="col-sm-6">
+
+                    <?=
+                    DatePicker::widget([
+                        'name' => 'date_from',
+                        'type' => DatePicker::TYPE_INPUT,
+                        'value' => $date_def_from,
+                        'options' => ['placeholder' => 'Начальная дата...'],
+                        'pluginOptions' => ['autoclose' => true]
+                    ]); ?>
+                </div>
+                <div class="col-sm-6">
+                    <?=
+                    DatePicker::widget([
+                        'name' => 'date_to',
+                        'type' => DatePicker::TYPE_INPUT,
+                        'value' => $date_def_to,
+                        'options' => ['placeholder' => 'Конечная дата...'],
+                        'pluginOptions' => ['autoclose' => true]
+                    ]); ?>
+                </div>
+            </div>
             <?php
             echo Html :: hiddenInput(\Yii:: $app->getRequest()->csrfParam, \Yii:: $app->getRequest()->getCsrfToken(), []);
             ?>
-            <?= Html::submitButton('Выбрать', ['class' => 'btn btn-warning'])?>
+            <?= Html::submitButton('Показать', ['class' => 'btn btn-warning'])?>
         </form>
-</div>
+
 

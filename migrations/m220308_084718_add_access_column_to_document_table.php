@@ -12,7 +12,7 @@ class m220308_084718_add_access_column_to_document_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('{{%document}}', 'type_access', $this->string());
+        $this->addColumn('{{%document}}', 'type_access_id', $this->string());
     }
 
     /**
@@ -20,6 +20,6 @@ class m220308_084718_add_access_column_to_document_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('{{%document}}', 'type_access');
+        $this->dropColumn('{{%document}}', 'type_access_id');
     }
 }

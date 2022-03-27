@@ -36,10 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute2' => 'date_to',
                     'type' => DatePicker::TYPE_RANGE,
                     'separator' => '-',
-                    'pluginOptions' => ['format' => 'yyyy-mm-dd']
+                    'pluginOptions' => ['format' => 'dd.mm.yy']
                 ]),
                 'attribute' => 'date',
-                'format' => ['date', 'php:Y-m-d']
+                'format' => ['date', 'php:d.m.y']
             ],
             [
                 'attribute' => 'Пользователь',
@@ -47,7 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->user->username;
                 }
             ],
-            'type_access',
+            [
+                'attribute' => 'Приватность',
+                'value' => function(\app\models\Document $model) {
+                    return $model->type_access_id;
+                }
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Document $model) {

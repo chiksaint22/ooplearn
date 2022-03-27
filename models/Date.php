@@ -25,7 +25,7 @@ class Date extends Model
     public function rules()
     {
         return [
-            [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
+            [['date_from', 'date_to'], 'date', 'format' => 'php:d.m.Y'],
         ];
     }
 }

@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
     ?>
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?=$form->field($model, 'type_access')->dropDownList($items, $params);?>
+    <?=$form->field($model, 'type_access_id')->dropDownList($items, $params);?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>

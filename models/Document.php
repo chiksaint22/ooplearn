@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
  * @property int $user_id
  * @property int $date
  * @property int $name
- * @property string $type_access
+ * @property int $type_access_id
  * @property int $date_from
  * @property int $date_to
  */
@@ -24,6 +24,11 @@ class Document extends ActiveRecord
     public $date_to;
 
     /**
+     * @var mixed|null
+     */
+    public $type;
+
+    /**
      * {@inheritdoc}
      */
 
@@ -31,8 +36,8 @@ class Document extends ActiveRecord
     {
         return [
             [['id', 'user_id'], 'integer'],
-            [['path', 'date', 'name', 'type_access'], 'safe'],
-            [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
+            [['path', 'date', 'name', 'type_access_id'], 'safe'],
+            [['date_from', 'date_to'], 'date', 'format' => 'php:d.m.y'],
         ];
     }
 
@@ -45,7 +50,7 @@ class Document extends ActiveRecord
         return [
             'name' => 'Название документа',
             'date' => 'Дата',
-            'type_access' => 'Приватность',
+            'type_access_id' => 'Приватность',
         ];
     }
 
@@ -56,5 +61,9 @@ class Document extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id'=>'user_id']);
+    }
+    public function getType()
+    {
+        return $this->hasOne(Type::class, ['id'=>'type_access_id']);
     }
 }

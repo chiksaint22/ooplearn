@@ -55,12 +55,12 @@ class DocumentSearch extends Document
             'id' => $this->id,
             'user_id' => $this->user_id,
             'date' => $this->date,
-            'type_access' => $this->type_access,
+            'type_access_id' => $this->type_access_id,
         ]);
 
         $query->andFilterWhere(['like', 'path', $this->path])
             ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'type_access', $this->type_access])
+            ->andFilterWhere(['like', 'type_access_id', $this->type_access_id])
             ->andFilterWhere(['>=', 'date', $this->date_from])
             ->andFilterWhere(['<=', 'date', $this->date_to]);
 

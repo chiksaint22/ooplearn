@@ -13,9 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1><?= Html::encode($this->title) ?></h1>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]);
 $items = [
-    'Публичный' => 'Публичный',
-    'Условно-приватный' => 'Условно-приватный',
-    'Приватный'=>'Приватный'
+    '1' =>'Публичный',
+    '2' =>'Условно-приватный',
+    '3'=>'Приватный'
 ];
 $params = [
     'prompt' => 'Задайте приватность...'

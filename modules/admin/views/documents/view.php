@@ -37,7 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 }
             ],
-           'date',
+            [
+                'attribute' => 'Дата загрузки',
+                'format' => ['date', 'php:d.m.y'],
+                'value' => function(\app\models\Document $model) {
+                    return $model->date;
+
+                }
+            ],
             [
                 'attribute' => 'Название документа',
                 'value' => function(\app\models\Document $model) {
@@ -48,10 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'Приватность',
                     'value' => function(\app\models\Document $model) {
-                    return $model->type_access;
+                    return $model->type_access_id;
                 }
             ]
         ],
     ]) ?>
-
 </div>

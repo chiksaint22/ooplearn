@@ -14,6 +14,7 @@ return [
     ],
     1 => [
         'Admin',
+        'updateOwnDoc',
     ],
     2 => [
         'User',

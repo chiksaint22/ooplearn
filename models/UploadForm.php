@@ -37,7 +37,7 @@ class UploadForm extends Model
                 $document->path = $filePath;
                 $document->user_id = Yii::$app->user->id;
                 $document->date = date("Y-m-d H:i:s");
-                $document->type_access = $this->type;
+                $document->type_access_id = $this->type;
                 $document->save();
 
                     Yii::$app->session->setFlash('success', 'Документы успешно загружены');
