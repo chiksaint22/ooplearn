@@ -18,6 +18,16 @@ return [
     ],
     2 => [
         'User',
-        'Работа с документами',
+        'updateOwnDoc',
+    ],
+    3 => [
+        'updateOwnDoc',
+        'User',
+    ],
+    4 => [
+        'User',
+    ],
+    5 => [
+        'User',
     ],
 ];

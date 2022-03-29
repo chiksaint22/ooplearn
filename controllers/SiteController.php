@@ -117,8 +117,6 @@ class SiteController extends UserController
                     'public' => $public,
                     'uprivate' => $uprivate,
                     'private' => $private,
-                    'date_from' => $date_from,
-                    'date_to' => $date_to,
                     'date_def_from' => $date_def_from,
                     'date_def_to' => $date_def_to,
                 ]);

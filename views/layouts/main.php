@@ -26,7 +26,7 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <header>
-    <?php
+<?php
     NavBar::begin([
         'brandLabel' => 'Мои документы',
         'brandUrl' => Yii::$app->homeUrl,
@@ -34,30 +34,24 @@ AppAsset::register($this);
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            Yii::$app->user->identity->username ? (
-                ['label' => 'Админ-панель', 'url' => ['/admin/documents/index']]
-            ) : (
-            ['label' => 'Регистрация', 'url' => ['/site/signup']]
-            ),
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Войти', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                . Html::submitButton(
-                    'Выйти (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
-    ]);
-    NavBar::end();
-    ?>
+echo Nav::widget([
+    'options' => ['class' => 'navbar-nav navbar-right'],
+    'items' => [
+        Yii::$app->user->isGuest ?
+        ['label' => 'Регистрация', 'url' => ['/site/signup']] :
+            ['label' => 'Админ-панель', 'url' => ['/admin/documents/index']],
+        Yii::$app->user->isGuest ? // Если пользователь гость, показыаем ссылку "Вход", если он авторизовался "Выход"
+            ['label' => 'Вход', 'url' => ['/site/login']] :
+            [
+                'label' => 'Выход (' . Yii::$app->user->identity->username . ')',
+                'url' => ['/site/logout'],
+                'linkOptions' => ['data-method' => 'post']
+            ],
+    ],
+    'encodeLabels' =>false,
+]);
+NavBar::end();
+?>
 </header>
 
 <main role="main" class="flex-shrink-0">

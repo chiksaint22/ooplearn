@@ -35,27 +35,20 @@ AppAsset::register($this);
             ],
         ]);
         echo Nav::widget([
-            'options' => ['class' => 'navbar-nav'],
+            'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
-                ['label' => 'Пользователи', 'url' => ['/rbac/']],
-                    Yii::$app->user->identity->username ? (
-                ['label' => 'Админ-панель', 'url' => ['/admin/documents/index']]
-                ) : (
-                ['label' => 'Регистрация', 'url' => ['/site/signup']]
-                ),
-                    Yii::$app->user->isGuest ? (
-                ['label' => 'Войти', 'url' => ['/site/login']]
-                ) : (
-                    '<li>'
-                    . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                    . Html::submitButton(
-                        'Выйти (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
-                )
+                Yii::$app->user->can('Редактирование пользователей') ?
+                    ['label' => 'Пользователи', 'url' => ['/rbac/']] :
+                    ['label' => 'Админ-панель', 'url' => ['/admin/documents/index']],
+                Yii::$app->user->isGuest ?
+                    ['label' => 'Вход', 'url' => ['/site/login']] :
+                    [
+                        'label' => 'Выход (' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post']
+                    ],
             ],
+            'encodeLabels' =>false,
         ]);
         NavBar::end();
         ?>

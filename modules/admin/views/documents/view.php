@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'Приватность',
                     'value' => function(\app\models\Document $model) {
-                    return $model->type_access_id;
+                    return $model->type->name;
                 }
             ]
         ],

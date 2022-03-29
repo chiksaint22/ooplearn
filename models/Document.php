@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $path
  * @property object $user
+ * @property object $type
  * @property int $user_id
  * @property int $date
  * @property int $name
@@ -26,7 +27,7 @@ class Document extends ActiveRecord
     /**
      * @var mixed|null
      */
-    public $type;
+//    public $type;
 
     /**
      * {@inheritdoc}

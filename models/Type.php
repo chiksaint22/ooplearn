@@ -16,11 +16,6 @@ use yii\db\ActiveRecord;
 
 class Type extends ActiveRecord
 {
-    public $id;
-    public $key;
-    public $name;
-    public $created_at;
-    public $updated_at;
 
     public function rules()
     {

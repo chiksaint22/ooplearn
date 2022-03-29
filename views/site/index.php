@@ -31,6 +31,7 @@ echo GridView::widget([
         [
             'attribute' => 'Пользователь',
             'value' => function(\app\models\Document $model) {
+
                 return $model->user->username;
 
             }
@@ -38,7 +39,9 @@ echo GridView::widget([
         [
             'attribute' => 'Приватность',
             'value' => function(\app\models\Document $model) {
-                return $model->type_access_id;
+
+                return $model->type->name;
+
             }
         ],
 
